@@ -91,6 +91,38 @@ section{padding:64px 0}
 .hide-m{display:none}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* Skills orbit */
+@keyframes spin{to{transform:rotate(360deg)}}
+.sk2{display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center}
+.sk2 .grid{grid-template-columns:1fr}
+.orbit{position:relative;width:84%;max-width:470px;aspect-ratio:1;margin:8px auto}
+.ring{position:absolute;border-radius:50%;border:1.5px dashed rgba(59,130,246,.4);animation:spin var(--t) linear infinite;animation-direction:var(--dir)}
+.ring.r1{inset:30%}.ring.r2{inset:15%}.ring.r3{inset:0}
+.ch{position:absolute;inset:0;transform:rotate(var(--a))}
+.ch span{position:absolute;top:0;left:50%;transform:translate(-50%,-50%) rotate(calc(-1 * var(--a)))}
+.ch b{display:block;font:700 .68rem/1 Sora,sans-serif;white-space:nowrap;padding:5px 9px;border-radius:99px;background:var(--bg2);border:1px solid var(--ac);color:var(--tx);animation:spin var(--t) linear infinite;animation-direction:var(--rdir);transition:background .2s}
+.ch b:hover{background:var(--ac);color:#fff}
+.ring.r2 .ch b{border-color:var(--ac2)}
+.ring.r3 .ch b{border-color:#14b8a6}
+.orbit:hover .ring,.orbit:hover .ch b{animation-play-state:paused}
+.core{position:absolute;inset:40%;border-radius:50%;display:grid;place-items:center;font:700 1.05rem Sora,sans-serif;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 0 30px rgba(139,92,246,.6)}
+@media(max-width:860px){.sk2{grid-template-columns:1fr}.ch b{font-size:.56rem;padding:4px 7px}}
+
+/* Professional dark polish */
+.skc{display:grid;justify-items:center;gap:28px}
+.orbit{width:92%;max-width:540px}
+.ch b{font-size:.72rem;padding:6px 11px}
+.leg{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:center}
+.leg span{display:inline-flex;align-items:center;gap:9px;font-size:.92rem;color:var(--tx2)}
+.leg i{width:10px;height:10px;border-radius:50%;display:inline-block}
+h2::after{content:"";display:block;width:56px;height:3px;margin-top:12px;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.card{transition:transform .3s,border-color .3s,box-shadow .3s}
+.card:hover{transform:translateY(-4px);border-color:var(--ac);box-shadow:0 16px 36px rgba(59,130,246,.18)}
+.tag{transition:border-color .2s,color .2s}
+.tag:hover{border-color:var(--ac);color:var(--tx)}
+.btn.p:hover{box-shadow:0 12px 32px rgba(139,92,246,.45)}
+@media(max-width:860px){.orbit{width:96%}.ch b{font-size:.58rem;padding:4px 7px}}
 </style>
 </head>
 <body>
@@ -133,7 +165,7 @@ section{padding:64px 0}
 <section id="skills"><div class="w">
 <h2>Skills</h2>
 <p class="lead">Current self-assessed level: beginner to intermediate, with active learning in progress.</p>
-<div class="grid" id="sk"></div>
+<div class="skc"><div class="orbit" id="skorb" role="img" aria-label="Skills orbit: technical, human resources, and business and analytical skills"></div><div class="leg" id="skleg"></div></div>
 </div></section>
 
 <section class="alt" id="experience"><div class="w">
@@ -249,7 +281,9 @@ $("yr").textContent=new Date().getFullYear();
 /* sections */
 var AI=['<rect x="9" y="26" width="6" height="14" rx="1"/><rect x="21" y="18" width="6" height="22" rx="1"/><rect x="33" y="10" width="6" height="30" rx="1"/><path d="M6 44h36"/>','<circle cx="21" cy="21" r="11"/><path d="M29 29l12 12M15 24l4-5 4 3 4-6"/>','<circle cx="17" cy="16" r="6"/><circle cx="33" cy="18" r="5"/><path d="M5 40c0-8 5-12 12-12s12 4 12 12M31 29c7-1 12 3 12 10"/>','<rect x="5" y="8" width="12" height="10" rx="2"/><rect x="31" y="8" width="12" height="10" rx="2"/><rect x="18" y="30" width="12" height="10" rx="2"/><path d="M17 13h14M11 18v6h26v-6M24 24v6"/>','<path d="M4 18l20-9 20 9-20 9zM12 22v10c4 4 20 4 24 0V22M44 18v12"/>'];
 $("hl").innerHTML=C.highlights.map(function(h,i){return '<div class="card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+AI[i]+'</svg></div><h3>'+h[0]+'</h3><p>'+h[1]+'</p></div>'}).join("");
-$("sk").innerHTML=C.skills.map(function(g){return '<div class="card"><h3>'+g[0]+'</h3>'+g[1].map(function(t){return '<span class="tag">'+t+'</span>'}).join("")+'</div>'}).join("");
+function ring(cls,t,d,rd,items){var n=items.length;return '<div class="ring '+cls+'" style="--t:'+t+'s;--dir:'+d+';--rdir:'+rd+'">'+items.map(function(x,i){return '<div class="ch" style="--a:'+(360/n*i)+'deg"><span><b>'+esc(x)+'</b></span></div>'}).join("")+'</div>'}
+var lc=["var(--ac)","var(--ac2)","#14b8a6"];$("skleg").innerHTML=[C.skills[0][0],C.skills[2][0],C.skills[1][0]].map(function(n,i){return '<span><i style="background:'+lc[i]+'"></i>'+esc(n)+'</span>'}).join("");
+$("skorb").innerHTML=ring("r3",46,"normal","reverse",C.skills[1][1])+ring("r2",34,"reverse","normal",C.skills[2][1])+ring("r1",24,"normal","reverse",C.skills[0][1])+'<div class="core">Skills</div>';
 $("ex").innerHTML=C.experience.map(function(x){return '<div class="card"><h3>'+x[0]+'</h3><p>'+x[1]+'</p>'+(x[2]?'<small><b>Duration:</b> '+x[2]+'</small>':'')+'<ul style="margin:12px 0 0;padding-left:18px;color:var(--tx2);font-size:.95rem">'+x[3].map(function(r){return '<li>'+r+'</li>'}).join("")+'</ul></div>'}).join("");
 $("ed").innerHTML=C.education.map(function(x){return '<div class="card"><h3>'+x[0]+'</h3><p>'+x[1]+'</p><small>'+x[2]+'</small></div>'}).join("");
 $("ce").innerHTML=C.certs.map(function(x){return '<div class="card"><h3>'+x[0]+'</h3><p>'+x[1]+'</p></div>'}).join("");
